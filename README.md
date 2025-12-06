@@ -1,292 +1,184 @@
-1. Overview
+# 🎙️ Voice-Enabled Task Tracker
 
-This project implements a voice-enabled task tracker allowing users to manage tasks through both a graphical interface and voice commands.
-The backend parses natural-language sentences to extract attributes such as priority, due date, and status.
-The frontend displays tasks using Kanban and list views.
+A modern full-stack task management application that supports **voice-based task creation**, **natural-language processing**, and a clean **Kanban/List UI**.  
+Built using **React, Node.js, TypeScript, MongoDB**, and a custom NLP pipeline.
 
-The system was built according to the specifications in the assignment and includes full CRUD operations, filters, search, and voice input.
+## 📑 Table of Contents
+- [1. Overview](#1-overview)
+- [2. Features](#2-features)
+- [3. Architecture](#3-architecture)
+- [4. Technology Stack](#4-technology-stack)
+- [5. Folder Structure](#5-folder-structure)
+- [6. Backend Overview](#6-backend-overview)
+- [7. Frontend Overview](#7-frontend-overview)
+- [8. Natural Language Processing](#8-natural-language-processing)
+- [9. API Endpoints](#9-api-endpoints)
+- [10. Installation](#10-installation)
+- [11. Running the Project](#11-running-the-project)
+- [12. Environment Variables](#12-environment-variables)
+- [13. Future Enhancements](#13-future-enhancements)
 
-2. Features
-Task Management
+# 1. Overview
+This project implements a **voice-enabled task tracker** that allows users to manage tasks using both a graphical interface and **voice commands**.  
+The backend parses natural language to extract title, priority, status, and due date.
 
-Create, edit, and delete tasks
+# 2. Features
 
-Assign priority (urgent, high, medium, low)
+## 📝 Task Management
+- Create, edit, delete tasks
+- Assign priority (`urgent`, `high`, `medium`, `low`)
+- Set task status (`to do`, `in progress`, `done`)
+- Due date assignment
+- Automatic timestamps
 
-Set task status (to do, in progress, done)
+## 🎤 Voice Input
+- Record speech using Web Speech API
+- Backend converts transcript → structured task data
+- User reviews parsed content before saving
 
-Due date selection
+## 🧠 Natural-Language Parsing
+Backend extracts:
+- Title  
+- Priority keywords  
+- Status  
+- Due dates (absolute + relative)
 
-Automatic timestamps
+## 🎨 UI / UX
+- Kanban & List views
+- Search + filtering
+- Glass-morphism Tailwind interface
+- Dark mode + accessibility
 
-Voice Input
-
-Records speech via Web Speech API
-
-Sends transcript to backend for parsing
-
-Backend converts natural language to structured task data
-
-User reviews parsed task before creation
-
-Natural Language Parsing
-
-Extracts:
-
-Title
-
-Priority keywords
-
-Status
-
-Due dates including:
-
-Absolute dates (“15 January”, “Jan 20”)
-
-Relative dates (“tomorrow”, “next Monday”, “in 3 days”, “by Friday”)
-
-UI / UX
-
-Kanban board
-
-List view
-
-Search and filtering
-
-Modern glass-morphism interface using Tailwind CSS
-
-Fully keyboard-accessible
-
-Dark mode enabled
-
-3. Architecture
-
+# 3. Architecture
+```
 Frontend (React + TypeScript + Vite)
         |
-        | Axios REST calls
         v
 Backend (Node.js + Express + TypeScript)
         |
-        | Mongoose ODM
         v
 Database (MongoDB Atlas)
+```
 
-Speech recognition occurs in the browser.
-NLP parsing occurs in the backend.
+# 4. Technology Stack
 
-4. Technology Stack
-Frontend
+## Frontend
+- React (TypeScript)
+- Vite
+- Tailwind CSS
+- Framer Motion
+- Lucide Icons
+- Axios
+- Sonner
 
-React (TypeScript)
+## Backend
+- Node.js / Express
+- TypeScript
+- MongoDB + Mongoose
+- chrono-node
+- NLP parsing logic
 
-Vite
-
-Tailwind CSS
-
-Framer Motion
-
-Lucide Icons
-
-Axios
-
-Sonner (notifications)
-
-Backend
-
-Node.js / Express
-
-TypeScript
-
-MongoDB + Mongoose
-
-chrono-node for date parsing
-
-Natural-language parsing logic
-
-5. Folder Structure
-
+# 5. Folder Structure
+```
 voice-task-tracker/
 │
 ├── backend/
 │   ├── src/
-│   │   ├── config/
-│   │   │   └── db.ts
-│   │   ├── controllers/
-│   │   │   ├── task.controller.ts
-│   │   │   └── voice.controller.ts
-│   │   ├── models/
-│   │   │   └── task.model.ts
-│   │   ├── routes/
-│   │   │   ├── task.routes.ts
-│   │   │   └── voice.routes.ts
-│   │   ├── services/
-│   │   │   └── voice-parser.service.ts
-│   │   ├── utils/
-│   │   │   └── date.utils.ts
-│   │   ├── app.ts
-│   │   └── server.ts
-│   └── package.json
+│   ├── controllers/
+│   ├── models/
+│   ├── routes/
+│   ├── services/
+│   ├── utils/
+│   ├── app.ts
+│   └── server.ts
 │
 ├── frontend/
 │   ├── src/
-│   │   ├── components/
-│   │   ├── pages/
-│   │   ├── lib/
-│   │   │   └── api.ts
-│   │   ├── types/
-│   │   │   └── index.ts
-│   │   └── index.css
-│   └── package.json
+│   ├── components/
+│   ├── pages/
+│   ├── lib/
+│   ├── types/
+│   └── index.css
 │
 └── README.md
+```
 
-6. Backend Overview
-Core Responsibilities
+# 6. Backend Overview
+- REST APIs for task CRUD  
+- NLP parsing  
+- MongoDB storage  
 
-Expose REST APIs for task CRUD
+# 7. Frontend Overview
+- Kanban + List UI  
+- Voice recorder  
+- Preview modal  
+- Axios API wrapper  
 
-Parse natural language text to structured task data
-
-Save and retrieve tasks from MongoDB
-
-Voice Parsing
-
-Key components:
-
-voice-parser.service.ts
-
-Uses regex and chrono-node
-
-Extracts:
-
-Priority keywords
-
-Date expressions
-
-Status
-
-Title
-
-7. Frontend Overview
-Key Features
-
-Two views: Kanban and List
-
-Reusable TaskModal for creation and editing
-
-VoiceRecorder to capture speech
-
-VoicePreviewModal to review parsed tasks
-
-Centralized Axios client (api.ts)
-
-State Management
-
-Local component state + React hooks.
-No external state libraries required.
-
-8. Natural Language Processing
-
-The backend supports:
-
-Priority Detection
-
-Words such as:
-
-“urgent”
-
-“high priority”
-
-“low priority”
-
-“critical”
-
-Status Detection
-
-Defaults to “to do” unless recognized words appear:
-
-“start”, “work on” → in progress
-
-“finished”, “complete” → done
-
-Date Extraction
-
+# 8. Natural Language Processing
 Supports:
+- Priority detection  
+- Status detection  
+- Absolute + relative dates  
+- Weekdays, weekend, "in X days"  
 
-Absolute dates
+# 9. API Endpoints
 
-Relative dates
+## Tasks
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | /api/tasks | List tasks |
+| POST | /api/tasks | Create task |
+| PUT | /api/tasks/:id | Update task |
+| DELETE | /api/tasks/:id | Delete task |
 
-Weekday-based references
+## Voice Parsing
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | /api/voice/parse | Convert transcript → structured task |
 
-Weekend / next week syntax
+# 10. Installation
 
-Numeric phrasing:
-
-“in 3 days”
-
-“after 2 weeks”
-
-Converted to ISO date strings in IST timezone.
-
-9. API Endpoints
-Tasks
-
-| Method | Endpoint       | Description                   |
-| ------ | -------------- | ----------------------------- |
-| GET    | /api/tasks     | List tasks (optional filters) |
-| POST   | /api/tasks     | Create a task                 |
-| PUT    | /api/tasks/:id | Update a task                 |
-| DELETE | /api/tasks/:id | Delete a task                 |
-
-Voice Parsing
-
-| Method | Endpoint         | Description                           |
-| ------ | ---------------- | ------------------------------------- |
-| POST   | /api/voice/parse | Convert transcript to structured task |
-
-10. Installation
-Backend
+## Backend
+```bash
 cd backend
 npm install
+```
 
-Frontend
+## Frontend
+```bash
 cd frontend
 npm install
+```
 
-11. Running the Project
-Start Backend
+# 11. Running the Project
+
+## Backend
+```bash
 npm run dev
+```
 
-Start Frontend
+## Frontend
+```bash
 npm run dev
+```
 
+# 12. Environment Variables
 
-Frontend will run on Vite (default port 5173).
-Backend runs on port 5000.
-
-12. Environment Variables
-
-Create a .env file in /backend:
-
+## Backend
+```
 MONGODB_URI=your_mongodb_connection_string
 PORT=5000
+```
 
-
-Frontend optional .env:
-
+## Frontend
+```
 VITE_API_URL=http://localhost:5000/api
+```
 
-13. Future Enhancements
-
-Offline speech recognition support
-
-Multi-user authentication
-
-Subtasks and reminders
-
-Analytics dashboard
-
-Export tasks to PDF / CSV
-
-Mobile-friendly UI improvements
+# 13. Future Enhancements
+- Offline speech recognition  
+- Multi-user authentication  
+- Subtasks & reminders  
+- Analytics dashboard  
+- Export tasks to PDF/CSV  
+- Improved mobile UI  
